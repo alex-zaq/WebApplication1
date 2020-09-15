@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.Models;
@@ -20,7 +21,7 @@ namespace WebApplication1
         {
 
             services.AddTransient<IProductRepository,FakeRepository> ();
-            services.AddMvc();
+            services.AddMvc(options => options.EnableEndpointRouting = false); ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,7 +31,17 @@ namespace WebApplication1
             app.UseStatusCodePages();
             app.UseStaticFiles();
 
-            app.UseMvc(configureRoutes => { });
+            app.UseMvc(
+                route => route.MapRoute(
+                    
+                    name:"default",
+
+                    template:"{controller=Product}/{action=List}/{id?}"
+                                       
+                    
+                    )
+                                
+                );
          
 
         }
